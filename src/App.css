@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+.home,
+.rootofequation,
+.products,
+.team,
+.rootofequation {
+  display: flex;
+  height: 90vh;
+  justify-content: center;
+}
+.top{
+  display: flex;
+  justify-content: center;
+}
+.site-card-wrapper{
+  border: 1px solid hsl(216, 8%, 88%);
+  border-radius: 4px;
+  margin: 20px auto;
+  width: 576;
+  background-color: aliceblue;
+}
