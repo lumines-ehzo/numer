@@ -9,6 +9,7 @@
     "antd": "^4.15.3",
     "axios": "^0.21.1",
     "cubic-spline": "^3.0.3",
+    "docker": "^1.0.0",
     "expr-eval": "^2.0.2",
     "interpolating-polynomial": "^1.1.2",
     "js-polynomial-regression": "^0.9.1",
