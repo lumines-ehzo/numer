@@ -20,6 +20,7 @@ import NewtonInterpulation from './pages/polynomial'
 import LagrangeInterpulaion from './pages/lagrange'
 import Cubic_Spline from './pages/Cubic_spline'
 import PolynomialRegression from './pages/Polynomial_Regression'
+import SW from './pages/swagger'
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
         <Route path='/lagrange' exact component={LagrangeInterpulaion} />
         <Route path='/cubic_spline' exact component={Cubic_Spline} />
         <Route path='/polynomial_regression' exact component={PolynomialRegression} />
+        <Route path='/swagger' exact component={SW} />
       </Switch>
     </Router>
   );
