@@ -1,142 +1,141 @@
-import React, { Component } from "react";
-import { Input, Button } from "antd";
-import { Card, Row, Col } from "antd";
-import "antd/dist/antd.css";
-import { create, all } from "mathjs";
-import "../App.css";
+import React from 'react'
+import '../css/layout.css'
 
-const math = create(all);
-export default class Secant extends Component {
-  constructor(props) {
-    super(props);
-    this.Secant = this.Secant.bind(this);
-    this.funcal = this.funcal.bind(this);
-    this.cleantable = this.cleantable.bind(this);
+import { Input } from 'antd';
+import { Button } from 'antd';
+
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+
+import axios from 'axios'
+
+let apiUrl = "http://localhost:4040/data/root/Secant?key=45134Asd4864wadfad"
+// let apiUrl = "https://my-json-server.typicode.com/pudjapu/react_wep/root"
+
+class Secant extends React.Component {
+
+  state = {
+    Equation: "",
+    X_1: '',
+    X_2: '',
+    ERROR: '',
+    result: '',
+    Chart: ''
   }
-  Secant = () => {
-    var table = document.getElementById("output");
-    var expression = document.getElementById("text1").value;
-    var x0 = document.getElementById("text2").value;
-    var x1 = document.getElementById("text3").value;
-    var x2 = 0;
-    var x = 0;
-    var n = 0;
-    var check = parseFloat(0.0);
-    if (
-      document.getElementById("output").getElementsByTagName("tr").length > 0
-    ) {
-      this.cleantable();
+
+  async gatdata() { // ฟังชั้นเรียก api
+    try {
+
+      const data = await axios.post(apiUrl).then(e => (
+        e.data
+      ))
+
+      this.setState({ Equation: data["eqtion"], X_1: data["x1"], X_2: data["x2"], ERROR: data["error"] })
+
+    } catch (error) {
+      this.setState({ result: "Not Sync" })
     }
-    do {
-      x =
-        x1 -
-        (this.funcal(x1, expression) * (x1 - x0)) /
-          (this.funcal(x1, expression) - this.funcal(x0, expression));
-      check = Math.abs((x - x1) / x).toFixed(8);
-      console.log(check);
-      n++;
-      console.log(n);
-      // Create an empty <tr> element and add it to the 1st position of the table:
-      var row = table.insertRow(n);
 
-      // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-      var cell1 = row.insertCell(0);
-      var cell2 = row.insertCell(1);
-      var cell3 = row.insertCell(2);
+  }
 
-      // Add some text to the new cells:
-      cell1.setAttribute("id", "cell");
-      cell2.setAttribute("id", "cell");
-      cell3.setAttribute("id", "cell");
+  getdata_ = (e) => {
+    this.gatdata();
+  }
 
-      cell1.innerHTML = n;
-      cell2.innerHTML = x;
-      cell3.innerHTML = check;
-      x0 = x1;
-      x1 = x;
-    } while (check > 0.00001 && n < 100);
+  getEquation = (e) => {
+    this.setState({
+      Equation: e.target.value,
+    });
   };
 
-  // แก้สมาการ X
-  funcal = (X, expression) => {
-    expression = math.compile(expression);
-    let scope = { x: parseFloat(X) };
-    return expression.evaluate(scope);
+  getX = (e) => {
+    this.setState({
+      X_1: e.target.value,
+    });
   };
 
-  //ลบ table
-  cleantable = () => {
-    var count = document.getElementById("output").getElementsByTagName("tr").length;
-    for (var j = 1; j < count; j++) {
-      document.getElementById("output").deleteRow(1);
+  getX_2 = (e) => {
+    this.setState({
+      X_2: e.target.value,
+    });
+  };
+
+  show_value = (e) => {
+    try {
+      const Parser = require('expr-eval').Parser;
+
+      let i = 1;
+      let arr = [];
+
+      let Equation = this.state.Equation;
+      let X_1 = this.state.X_1;
+      X_1 = parseFloat(X_1);
+      let X_2 = this.state.X_2;
+      X_2 = parseFloat(X_2);
+      let ERROR = this.state.ERROR;
+      ERROR = parseFloat(ERROR);
+      let Chart = [];
+
+      var expression = Parser.parse(Equation);
+
+      let d = X_1 - X_2;
+      let Fan, Xnew;
+      let err_ = 1;
+
+      while (err_ > ERROR) {
+        X_2 = X_1 + d;
+        Fan = - ((expression.evaluate({ x: X_2 }) * (X_1 - X_2)) / (expression.evaluate({ x: X_1 }) - expression.evaluate({ x: X_2 })))
+        Xnew = X_2 + Fan;
+
+        err_ = Math.abs((Xnew - X_1) / Xnew);
+        arr.push(<div className='result' key={i}>Iteration {i} : {Xnew}</div>);
+        X_1 = Xnew;
+        i++;
+      }
+
+      for (i = parseFloat(this.state.X_1) - 0.1; i <= parseFloat(this.state.X_1) + 1; i = i + 0.1) {
+        let P_X = expression.evaluate({ x: i })
+
+        Chart.push({ fx: P_X, y: 0, x: i.toFixed(2) })
+      }
+
+      this.setState({ result: arr, Chart: Chart })
+    } catch (e) {
+      this.setState({ result: "No data" })
     }
-  };
+
+
+  }
+
   render() {
     return (
-      <div className="site-card-wrapper">
-          <div className="top">
-        <Row >
-          <Col >
-            <Card title="Secant" bordered={false}>
-              <form>
-                <p>Input Equal</p>
-                <Input type="text" placeholder="EX: 1/2" id="text1" />
-                <br />
-                <br />
-                <p>Initial Number 1 (X0) :</p>
-                <Input type="text" id="text2" />
-                <br />
-                <br />
-                <p>Initial Number 2 (X1) :</p>
-                <Input type="text" id="text3" />
-                <br />
-                <br />
-              </form>
-              <center>
-                <Button type="primary" onClick={this.Secant}>
-                  SUBMIT
-                </Button>
-                &nbsp;&nbsp;
-                <br />
-                <br />
-              </center>
-            </Card>
-          </Col>
-        </Row>
+      <div className='container'>
+        <div className='container_main'>
+          <h2>Secant</h2>
+          <div>
+            <span><Input onChange={this.getEquation} className="Input" value={this.state.Equation} /></span>
+            <span className="Calculate_Button"><Button type="primary" onClick={this.show_value} >Calculate</Button></span>
+            <span className="Calculate_Button"><Button type="primary" onClick={this.getdata_} >Get example</Button></span>
+          </div>
+          <div>
+            <span className="Text_Input_2"> X 1 : </span>
+            <span><Input onChange={this.getX} className="Input_2" value={this.state.X_1} /></span>
+            <span className="Text_Input_2"> X 2 : </span>
+            <span><Input onChange={this.getX_2} className="Input_2" value={this.state.X_2} /></span>
+            <span className="Text_Input_2"> ERROR : </span>
+            <span><Input onChange={this.getERR} className="Input_2" value={this.state.ERROR} /></span>
+          </div>
+          {this.state.result}
+          <LineChart width={1200} height={300} data={this.state.Chart} margin={{ top: 5, right: 20, bottom: 5, left: 400 }}>
+            <Line type="monotone" dataKey="fx" stroke="#FF0000" dot={false} />
+            <Line type="monotone" dataKey="y" stroke="#0000FF" dot={false} />
+            <CartesianGrid stroke="#ccc" />
+            <XAxis dataKey="x" />
+            <YAxis />
+          </LineChart>
         </div>
-        <br />
-        <br />
-        <Row gutter={24}>
-          <Col span={24}>
-            <Card title="Output" bordered={false}>
-              <table
-                id="output"
-                style={{ padding: "0px 8px" }}
-                className="table table-hover"
-              >
-                <tbody>
-                  <tr style={{ textAlign: "center" }}>
-                    <th width="20%">Iteration</th>
-                    <th width="25%">X</th>
-                    <th width="30%">
-                      |x<sub>i</sub>-x<sub>i-1</sub>|
-                    </th>
-                  </tr>
-                  <tr className="list-data">
-                    <td
-                      width="20%"
-                      id="Iteration"
-                      style={{ textAlign: "center" }}
-                    />
-                    <td width="25%" id="x" />
-                    <td width="30%" id="error" />
-                  </tr>
-                </tbody>
-              </table>
-            </Card>
-          </Col>
-        </Row>
       </div>
-    );
+    )
   }
 }
+
+export default Secant

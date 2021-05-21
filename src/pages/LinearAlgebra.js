@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 
 
 export const LinearAlgibra = () => {
@@ -34,4 +34,4 @@ export const OnePointIteration = () => {
     <div className='onepointiteration'>
     </div>
   );
-};
+};*/

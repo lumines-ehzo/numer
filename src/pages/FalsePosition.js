@@ -1,193 +1,168 @@
-import React, { Component } from "react";
-import { Input, Button } from "antd";
-import { Card, Row, Col } from "antd";
-import "antd/dist/antd.css";
-import "../App.css";
-import { create, all } from "mathjs";
+import React from 'react';
 
-const math = create(all);
-class FalsePosition extends Component {
-  constructor(props) {
-    super(props);
-    this.FPos = this.FPos.bind(this);
-    this.findxm = this.findxm.bind(this);
-    this.funcal = this.funcal.bind(this);
-    this.cleantable = this.cleantable.bind(this);
-  }
-  FPos = () => {
-    var table = document.getElementById("output");
-    var xl = document.getElementById("text2").value;
-    var xr = document.getElementById("text3").value;
-    var x_old = xr;
-    var xm = 0;
-    var n = 0;
-    var check = parseFloat(0.0);
-    if (
-      document.getElementById("output").getElementsByTagName("tr").length > 0
-    ) {
-      this.cleantable();
-    }
-    do {
-      if (xl != xr) {
-        xm = this.findxm(xl, xr);
-        check = Math.abs(xm - x_old).toFixed(8);
-      } else {
-        console.log("do");
-        check = 0;
-      }
+import { Input } from 'antd';
+import { Button } from 'antd';
 
-      console.log(check);
-      n++;
-      console.log(n);
-      // Create an empty <tr> element and add it to the 1st position of the table:
-      var row = table.insertRow(n);
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 
-      // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-      var cell1 = row.insertCell(0);
-      var cell2 = row.insertCell(1);
-      var cell3 = row.insertCell(2);
-      var cell4 = row.insertCell(3);
-      var cell5 = row.insertCell(4);
+import axios from 'axios'
+import '../css/layout.css'
 
-      // Add some text to the new cells:
-      cell1.innerHTML = n;
-      cell1.setAttribute("id", "cell");
-      cell2.innerHTML = xl;
-      cell2.setAttribute("id", "cell");
-      cell3.innerHTML = xr;
-      cell3.setAttribute("id", "cell");
-      cell4.innerHTML = xm;
-      cell4.setAttribute("id", "cell");
-      cell5.innerHTML = check;
-      cell5.setAttribute("id", "cell");
+let apiUrl = "http://localhost:4040/data/root/False_position?key=45134Asd4864wadfad"
+// let apiUrl = "https://my-json-server.typicode.com/pudjapu/react_wep/root"
 
-      if (this.funcal(xl) < this.funcal(xr)) {
-        if (this.funcal(xm) > 0) {
-          xr = xm;
-        } else if (this.funcal(xm) < 0) {
-          xl = xm;
-        } else if (this.funcal(xm) == 0) {
-          xr = xm;
-          xl = xm;
+class FalsePosition extends React.Component {
+
+    state = {
+        Equation: '',
+        XL: '',
+        XR: '',
+        ERROR: '',
+        result: '',
+        Chart: ''
+    };
+
+    async gatdata() { // ฟังชั้นเรียก api
+        try {
+
+            const data = await axios.post(apiUrl).then(e => (
+                e.data
+            ))
+
+            this.setState({ Equation: data["eqtion"], XL: data["xl"], XR: data["xr"], ERROR: data["error"] })
+
+        } catch (error) {
+            this.setState({ result: "Not Sync" })
         }
-      } else if (this.funcal(xl) > this.funcal(xr)) {
-        if (this.funcal(xm) < 0) {
-          xr = xm;
-        } else if (this.funcal(xm) > 0) {
-          xl = xm;
-        } else if (this.funcal(xm) == 0) {
-          xr = xm;
-          xl = xm;
-        }
-      }
-      if (parseFloat(xl) > parseFloat(xr)) {
-        var temp = xr;
-        xr = xl;
-        xl = temp;
-      }
-      x_old = xm;
-    } while (check > 0.00001 && n < 100);
-  };
-  //คำนวนหา Xm
-  findxm = (xl, xr) => {
-    return (
-      (xl * this.funcal(xr) - xr * this.funcal(xl)) /
-      (this.funcal(xr) - this.funcal(xl))
-    );
-  };
 
-  // แก้สมาการ X
-  funcal = X => {
-    var expression = document.getElementById("text1").value;
-    expression = math.compile(expression);
-    let scope = { x: parseFloat(X) };
-    return expression.eval(scope);
-  };
-
-  //ลบ table
-  cleantable = () => {
-    var count = document.getElementById("output").getElementsByTagName("tr")
-      .length;
-    for (var j = 1; j < count; j++) {
-      document.getElementById("output").deleteRow(1);
     }
-  };
 
-  render() {
-    return (
-      <div className="site-card-wrapper">
-          <div className="top">
-        <Row >
-          <Col >
-            <Card title="FalsePosition" bordered={false}>
-              <form>
-                <p>Input Equal</p>
-                <Input type="text" placeholder="EX: 2x+1" id="text1" />
-                <br />
-                <br />
-                <p>Number Start (XL)</p>
-                <Input type="text" placeholder="3" id="text2" />
-                <br />
-                <br />
-                <p>Numer End (XR)</p>
-                <Input type="text" placeholder="5" id="text3" />
-                <br />
-                <br />
-              </form>
-              <center>
-                <Button type="primary" onClick={this.FPos}>
-                  SUBMIT
-                </Button>
-                &nbsp;&nbsp;
-                <br />
-                <br />
-              </center>
-            </Card>
-          </Col>
-        </Row>
-        </div>
-        <br />
-        <br />
-        <Row gutter={24}>
-          <Col span={24}>
-            <Card title="Output" bordered={false}>
-              <table
-                id="output"
-                style={{ padding: "0px 8px" }}
-                className="table table-hover"
-              >
-                <tbody>
-                  <tr style={{ textAlign: "center" }}>
-                    <th width="20%">Iteration</th>
-                    <th width="25%">
-                      X<sub>L</sub>
-                    </th>
-                    <th width="25%">
-                      X<sub>R</sub>
-                    </th>
-                    <th width="30%">
-                      X<sub>M</sub>
-                    </th>
-                    <th width="30%">Error</th>
-                  </tr>
-                  <tr className="list-data">
-                    <td
-                      width="20%"
-                      id="Iteration"
-                      style={{ textAlign: "center" }}
-                    />
-                    <td width="25%" id="xl1" />
-                    <td width="25%" id="xr1" />
-                    <td width="30%" id="x" />
-                    <td width="30%" id="error" />
-                  </tr>
-                </tbody>
-              </table>
-            </Card>
-          </Col>
-        </Row>
-      </div>
-    );
-  }
+    getdata_ = (e) => {
+        this.gatdata();
+    }
+
+    getEquation = (e) => {
+        this.setState({
+            Equation: e.target.value,
+        });
+    };
+
+    getXL = (e) => {
+        this.setState({
+            XL: e.target.value,
+        });
+    };
+
+    getXR = (e) => {
+        this.setState({
+            XR: e.target.value,
+        });
+    };
+
+    getERR = (e) => {
+        this.setState({
+            ERROR: e.target.value,
+        });
+    };
+
+
+
+    show_value = (e) => {
+
+        try {
+            const Parser = require('expr-eval').Parser; // ฟั่งชั้นแปลงสมการ
+            let i;
+            let arr = [];
+            let err = 1;
+            let Xnew;
+
+            let Equation = this.state.Equation;
+            let XL = this.state.XL;
+            XL = parseFloat(XL);
+            let XR = this.state.XR;
+            XR = parseFloat(XR);
+            let ERROR = this.state.ERROR;
+            ERROR = parseFloat(ERROR);
+
+            let Chart = [];
+
+            var expression = Parser.parse(Equation);
+
+            let X = ((XL * expression.evaluate({ x: XR })) - (XR * expression.evaluate({ x: XL }))) / (expression.evaluate({ x: XR }) - expression.evaluate({ x: XL }))
+
+            for (i = parseFloat(this.state.XL) - 0.1; i <= parseFloat(this.state.XR) + 0.1; i = i + 0.1) {
+                let P_X = expression.evaluate({ x: i })
+
+                Chart.push({ fx: P_X, y: 0, x: i.toFixed(2) })
+            }
+
+            if (expression.evaluate({ x: X }) > 0) {
+                XR = X;
+            }
+            else {
+                XL = X;
+            }
+
+            //(expression.evaluate({ x: X }) > 0) ? (XR = X) : (XL = X)
+            i = 1;
+            while (err > ERROR) {
+                Xnew = ((XL * expression.evaluate({ x: XR })) - (XR * expression.evaluate({ x: XL }))) / (expression.evaluate({ x: XR }) - expression.evaluate({ x: XL }))
+
+                if (expression.evaluate({ x: Xnew }) * expression.evaluate({ x: XR })) {
+                    XR = Xnew
+                }
+                else {
+                    XL = Xnew
+                }
+
+                //((expression.evaluate({ x: Xnew })*expression.evaluate({ x: XR })) > 0) ? (XR = Xnew) : (XL = Xnew)
+                arr.push(<div className='result' key={i}>Iteration {i} : {Xnew}</div>);
+                err = Math.abs((Xnew - X) / Xnew);
+                X = Xnew;
+                i++;
+            }
+            this.setState({ result: arr, Chart: Chart })
+        } catch (e) {
+            this.setState({ result: "No data" })
+        }
+
+
+    }
+
+    render() {
+        return (
+            <div className="container">
+                <div className="container_main">
+                    <h2>False position</h2>
+                    <div>
+                        <span><Input onChange={this.getEquation} className="Input" value={this.state.Equation} /></span>
+                        <span className="Calculate_Button"><Button type="primary" onClick={this.show_value} >Calculate</Button></span>
+                        <span className="Calculate_Button"><Button type="primary" onClick={this.getdata_} >Get example</Button></span>
+                    </div>
+                    <div>
+                        <span className="Text_Input_2"> XL : </span>
+                        <span><Input onChange={this.getXL} className="Input_2" value={this.state.XL} /></span>
+                        <span className="Text_Input_2"> XR : </span>
+                        <span><Input onChange={this.getXR} className="Input_2" value={this.state.XR} /></span>
+                        <span className="Text_Input_2"> ERROR : </span>
+                        <span><Input onChange={this.getERR} className="Input_2" value={this.state.ERROR} /></span>
+                    </div>
+                    {this.state.result}
+                    <div className='Chart'>
+                        <LineChart width={1200} height={300} data={this.state.Chart} margin={{ top: 5, right: 20, bottom: 5, left: 400 }}>
+                            <Line type="monotone" dataKey="fx" stroke="#FF0000" dot={false} />
+                            <Line type="monotone" dataKey="y" stroke="#0000FF" dot={false} />
+                            <CartesianGrid stroke="#ccc" />
+                            <XAxis dataKey="x" />
+                            <YAxis />
+                        </LineChart>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+
 }
+
 export default FalsePosition;

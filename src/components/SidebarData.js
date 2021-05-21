@@ -12,14 +12,13 @@ export const SidebarData = [
   },
   {
     title: 'RootOfEquation',
-    path: '/rootofequation',
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
     subNav: [
       {
         title: 'Bisection',
-        path: '/bisection',
+        path: '/bisection_method',
         icon: <IoIcons.IoIosPaper />,
         cName: 'sub-nav'
       },
@@ -48,32 +47,80 @@ export const SidebarData = [
     ]
   },
   {
-    title: 'Products',
-    path: '/products',
-    icon: <FaIcons.FaCartPlus />
-  },
-  {
-    title: 'Team',
-    path: '/team',
-    icon: <IoIcons.IoMdPeople />
-  },
-  {
-    title: 'Messages',
-    path: '/messages',
-    icon: <FaIcons.FaEnvelopeOpenText />,
-
+    title: 'Matrix',
     iconClosed: <RiIcons.RiArrowDownSFill />,
     iconOpened: <RiIcons.RiArrowUpSFill />,
 
     subNav: [
       {
-        title: 'Message 1',
-        path: '/messages/message1',
+        title: 'Cramer',
+        path: '/cramer',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
+      {
+        title: 'Gauss Elimination',
+        path: '/gausselimination',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
+      {
+        title: 'Gauss Jordan',
+        path: '/gaussjordan',
+        icon: <IoIcons.IoIosPaper />,
+        cName: 'sub-nav'
+      },
+      {
+        title: 'Lu Decomposition',
+        path: '/lu_decomposition',
         icon: <IoIcons.IoIosPaper />
       },
       {
-        title: 'Message 2',
-        path: '/messages/message2',
+        title: 'Jacobi iteration',
+        path: '/jacobi',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Gauss Seidel',
+        path: '/gauss_seidel',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Conjugate Gradient',
+        path: '/conjugate_gradient',
+        icon: <IoIcons.IoIosPaper />
+      }
+    ]
+  },
+  {
+    title: 'Interpulation',
+    iconClosed: <RiIcons.RiArrowDownSFill />,
+    iconOpened: <RiIcons.RiArrowUpSFill />,
+
+    subNav: [
+      {
+        title: 'Newton Interpulation',
+        path: '/polynomial',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Lagrange Interpulation',
+        path: '/lagrange',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Cubic-Spline',
+        path: '/cubic_spline',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Linear Regression',
+        path: '/linearregression',
+        icon: <IoIcons.IoIosPaper />
+      },
+      {
+        title: 'Polynomial Regression',
+        path: '/polynomial_regression',
         icon: <IoIcons.IoIosPaper />
       }
     ]

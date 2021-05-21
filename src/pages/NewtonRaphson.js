@@ -1,140 +1,134 @@
-import React, { Component } from "react";
-import { Input, Button } from "antd";
-import { Card, Row, Col } from "antd";
-import "antd/dist/antd.css";
-import { create, all } from "mathjs";
-import "../App.css";
+import React from 'react'
+import '../css/layout.css'
 
-const math = create(all);
-class NewtonRaphson extends Component {
-  constructor(props) {
-    super(props);
-    this.NRaphson = this.NRaphson.bind(this);
-    this.funcal = this.funcal.bind(this);
-    this.cleantable = this.cleantable.bind(this);
-  }
-  NRaphson = () => {
-    //math.derivative('x^2', 'x')
-    var table = document.getElementById("output");
-    var expression = document.getElementById("text1").value;
-    var expression2 = math.derivative(expression, 'x');
-    //var expression3 = "("+expression+")+"+"(x-"+x+")*("+math.derivative(expression, 'x')+")"; //หา derivative
-    var x = 0;
-    var x_old = document.getElementById("text2").value;
-    var n = 0;
-    var check = parseFloat(0.00000000);
-    if(document.getElementById("output").getElementsByTagName("tr").length>0){
-            this.cleantable();
+import {derivative} from 'mathjs'
+
+import { Input } from 'antd';
+import { Button } from 'antd';
+
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+
+import axios from 'axios'
+let apiUrl = "http://localhost:4040/data/root/Newton_Raphson?key=45134Asd4864wadfad"
+// let apiUrl = "https://my-json-server.typicode.com/pudjapu/react_wep/root"
+
+
+class NewtonRaphson extends React.Component{
+
+    state = {
+        Equation: "",
+        X: '',
+        ERROR: '',
+        result: '',
+        Chart: ''
     }
-    console.log(expression2.toString());
-    do{
-            n++;
 
-            x = x_old-(this.funcal(x_old,expression)/this.funcal(x_old,expression2.toString()));
-            check = Math.abs(x-x_old).toFixed(8);
-            console.log(check);
-            console.log(n);
-            // Create an empty <tr> element and add it to the 1st position of the table:
-            var row = table.insertRow(n);
+    async gatdata() { // ฟังชั้นเรียก api
+        try {
 
-            // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
+            const data = await axios.post(apiUrl).then(e => (
+                e.data
+            ))
+            
+            this.setState({Equation: data["eqtion"],X: data["x"],ERROR: data["error"]})
 
-            // Add some text to the new cells:
+          } catch (error) {
+            this.setState({result : "Not Sync"})
+          }
 
-            cell1.setAttribute("id","cell");
-            cell2.setAttribute("id","cell");
-            cell3.setAttribute("id","cell");
-
-            cell1.innerHTML = n;
-            cell2.innerHTML = x;
-            cell3.innerHTML = check;
-
-            x_old = x;
-    }while(check>0.00001 && n<100)
-  };
-
-  // แก้สมาการ X
-  funcal = (X, expression) => {
-    expression = math.compile(expression);
-    let scope = { x: parseFloat(X) };
-    return expression.evaluate(scope);
-  };
-
-  //ลบ table
-  cleantable = () => {
-    var count = document.getElementById("output").getElementsByTagName("tr")
-      .length;
-    for (var j = 1; j < count; j++) {
-      document.getElementById("output").deleteRow(1);
     }
-  };
 
-  render() {
-    return (
-      <div className="site-card-wrapper">
-          <div className="top">
-        <Row >
-          <Col >
-            <Card title="NewtonRaphson" bordered={false}>
-              <form>
-                <p>Input Equal</p>
-                <Input type="text" placeholder="EX: 1/2" id="text1" />
-                <br />
-                <br />
-                <p>Initial Number X :</p>
-                <Input type="text" id="text2" />
-                <br />
-                <br />
-              </form>
-              <center>
-                <Button type="primary" onClick={this.NRaphson}>
-                  SUBMIT
-                </Button>
-                &nbsp;&nbsp;
-                <br />
-                <br />
-              </center>
-            </Card>
-          </Col>
-        </Row>
-        </div>
-        <br />
-        <br />
-        <Row gutter={24}>
-          <Col span={24}>
-            <Card title="Output" bordered={false}>
-              <table
-                id="output"
-                style={{ padding: "0px 8px" }}
-                className="table table-hover"
-              >
-                <tbody>
-                  <tr style={{ textAlign: "center" }}>
-                    <th width="20%">Iteration</th>
-                    <th width="25%">X</th>
-                    <th width="30%">
-                      |x<sub>i</sub>-x<sub>i-1</sub>|
-                    </th>
-                  </tr>
-                  <tr className="list-data">
-                    <td
-                      width="20%"
-                      id="Iteration"
-                      style={{ textAlign: "center" }}
-                    />
-                    <td width="25%" id="x" />
-                    <td width="30%" id="error" />
-                  </tr>
-                </tbody>
-              </table>
-            </Card>
-          </Col>
-        </Row>
-      </div>
-    );
-  }
+    getdata_ = (e) => {
+        this.gatdata();
+    }
+
+    getEquation = (e) => {
+        this.setState({
+            Equation: e.target.value,
+        });
+    };
+    
+    getERR= (e) => {
+        this.setState({
+            ERROR: e.target.value,
+        });
+    };
+
+    getX = (e) => {
+        this.setState({
+            X: e.target.value,
+        });
+    };
+
+    show_value = (e) =>{
+
+        try {
+            const Parser = require('expr-eval').Parser;
+
+            let i = 1;
+            let arr = [];
+
+            let Equation = this.state.Equation;
+            let Equation_def = derivative(Equation,"x").toString();
+            // console.log(Equation_def);
+            let X = this.state.X;
+            X = parseFloat(X);
+            let ERROR = this.state.ERROR;
+            ERROR = parseFloat(ERROR);
+            let chart = [];
+
+            var expression_1 = Parser.parse(Equation);
+            var expression_2 = Parser.parse(Equation_def);
+
+            let X_new = X - (expression_1.evaluate({x : X})/expression_2.evaluate({x : X}));
+
+            let error_ = Math.abs((X_new-X)/X);
+
+            while(error_ > ERROR){
+
+                X_new = X - (expression_1.evaluate({x : X})/expression_2.evaluate({x : X}));
+                error_ = Math.abs((X_new-X)/X);
+                X = X_new;
+                let Y = expression_1.evaluate({ x: X_new })
+                chart.push({data: X_new,y: Y});
+                arr.push(<div className='result' key={i}>Iteration {i} : {X_new}</div>);
+                i++;
+            }
+            this.setState({result: arr, Chart: chart})
+        } catch(e) {
+            this.setState({result : "No data"})
+        }
+
+        
+    }
+
+    render(){
+        return(
+            <div className='container'>
+              <div className='contain_main'>
+                <h2>Newton Raphson</h2>
+                <div>
+                <span><Input onChange={this.getEquation} className="Input" value={this.state.Equation}/></span>
+                    <span className="Calculate_Button"><Button type="primary" onClick={this.show_value} >Calculate</Button></span>
+                    <span className="Calculate_Button"><Button type="primary" onClick={this.getdata_} >Get example</Button></span>
+                </div>
+                <div>
+                    <span className="Text_Input_2"> X เริ่มต้น : </span>
+                    <span><Input onChange={this.getX} className="Input_2" value={this.state.X}/></span>
+                    <span className="Text_Input_2"> ERROR : </span>
+                    <span><Input onChange={this.getERR} className="Input_2" value={this.state.ERROR}/></span>
+                </div>
+                {this.state.result}
+                <LineChart width={1200} height={300} data={this.state.Chart} margin={{ top: 5, right: 20, bottom: 5, left: 400 }}>
+                    <Line type="monotone" dataKey="y" stroke="#8884d8" dot={false}/>
+                    <CartesianGrid stroke="#ccc" />
+                    <XAxis dataKey="data" />
+                    <YAxis />
+                    </LineChart>
+            </div>
+            </div>
+        )
+    }
 }
-export default NewtonRaphson;
+
+export default NewtonRaphson
