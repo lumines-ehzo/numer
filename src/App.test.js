@@ -1,9 +1,9 @@
 /*import { render, screen } from '@testing-library/react';
-import App from './App';
+import App from './pages/Home';
 
-test('home', () => {
+test('6104062630212', () => {
   render(<App />);
-  const linkElement = screen.getByText('home');
+  const linkElement = screen.getByText('6104062630212');
   expect(linkElement).toBeInTheDocument();
 });*/
 it("adds correctly",()=>{
