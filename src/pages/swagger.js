@@ -7,7 +7,7 @@ import 'swagger-ui-react/swagger-ui.css'
 const data = {
     "swagger": "2.0",
     "info": {
-        "description": "ดีง้าบบบบ",
+        "description": "Ohayoooo",
         "title": "Numerical Method"
     },
     "host": "localhost:4040/data",

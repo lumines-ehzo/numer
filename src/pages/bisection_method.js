@@ -120,8 +120,8 @@ class Bisection extends React.Component {
           {this.state.result}
           <div className='Chart'>
             <LineChart width={1200} height={300} data={this.state.Chart} margin={{ top: 5, right: 20, bottom: 5, left: 400 }}>
-              <Line type="monotone" dataKey="fx" stroke="#FF0000" dot={false} />
-              <Line type="monotone" dataKey="y" stroke="#0000FF" dot={false} />
+              <Line type="monotone" dataKey="fx" stroke="#8884d8" activeDot={{ r: 8 }} />
+              <Line type="monotone" dataKey="y" stroke="#82ca9d" />
               <CartesianGrid stroke="#ccc" />
               <XAxis dataKey="x" />
               <YAxis />

@@ -132,8 +132,10 @@ class Gauss_seidel extends React.Component{
                     <span className="Text_Input_2"> ERROR : </span>
                     <span><Input onChange={this.getERR} className="Input_2" value={this.state.ERROR} /></span>
                 </div>
-                <Matrix row={this.state.rows} onChange={this.Input} value={this.state.Matrix}/>
-                <div>{this.state.X}</div>
+                <div className='MakeMatrix'>
+                        <Matrix row={this.state.rows} onChange={this.Input} value={this.state.Matrix} />
+                    </div>
+                    <div className='Matrix'>{this.state.X}</div>
             </div>
             </div>
         )

@@ -98,8 +98,10 @@ class Gauss_Jordan extends React.Component {
                     <Button className='Button_' type="primary" onClick={this.DelMatrix}>Delete row/column</Button>
                     <Button className='Button_' type="primary" onClick={this.Calculate}>Calculate</Button>
                     <Button type="primary" onClick={this.getdata_} >Get example</Button>
-                    <Matrix row={this.state.rows} onChange={this.Input} value={this.state.Matrix} />
-                    <div>{this.state.X}</div>
+                    <div className='MakeMatrix'>
+                        <Matrix row={this.state.rows} onChange={this.Input} value={this.state.Matrix} />
+                    </div>
+                    <div className='Matrix'>{this.state.X}</div>
 
                 </div>
             </div>
