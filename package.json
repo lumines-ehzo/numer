@@ -11,6 +11,7 @@
     "cubic-spline": "^3.0.3",
     "docker": "^1.0.0",
     "expr-eval": "^2.0.2",
+    "express": "^4.17.1",
     "interpolating-polynomial": "^1.1.2",
     "js-polynomial-regression": "^0.9.1",
     "mathjs": "^9.3.2",
