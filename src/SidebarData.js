@@ -123,10 +123,5 @@ export const SidebarData = [
         icon: <IoIcons.IoIosPaper />
       }
     ]
-  },
-  {
-    title: 'Support',
-    path: '/support',
-    icon: <IoIcons.IoMdHelpCircle />
   }
 ];

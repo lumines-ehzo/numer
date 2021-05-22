@@ -3,7 +3,6 @@ import React from 'react';
 import Sidebar from './Sidebar';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './pages/Home';
-import Team from './pages/Team';
 import Bisection from './pages/bisection_method';
 import FalsePosition from './pages/FalsePosition';
 import NewtonRaphson from './pages/NewtonRaphson';
@@ -21,7 +20,7 @@ import NewtonInterpulation from './pages/polynomial'
 import LagrangeInterpulaion from './pages/lagrange'
 import Cubic_Spline from './pages/Cubic_spline'
 import PolynomialRegression from './pages/Polynomial_Regression'
-import SW from './pages/swagger'
+import Swagger from './pages/swagger'
 
 class App extends React.Component {
 
@@ -54,7 +53,6 @@ class App extends React.Component {
           <Route path='/newtonraphson' exact component={NewtonRaphson} />
           <Route path='/onepointiteration' exact component={OnePointIteration} />
           <Route path='/secant' exact component={Secant} />
-          <Route path='/team' exact component={Team} />
           <Route path='/gausselimination' exact component={GaussElimination} />
           <Route path='/cramer' exact component={Cramer} />
           <Route path='/gaussjordan' exact component={GaussJordan} />
@@ -67,7 +65,7 @@ class App extends React.Component {
           <Route path='/lagrange' exact component={LagrangeInterpulaion} />
           <Route path='/cubic_spline' exact component={Cubic_Spline} />
           <Route path='/polynomial_regression' exact component={PolynomialRegression} />
-          <Route path='/swagger' exact component={SW} />
+          <Route path='/swagger' exact component={Swagger} />
         </Switch>
       </Router>
     );
