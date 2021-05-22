@@ -1,4 +1,5 @@
 import './App.css';
+import React from 'react';
 import Sidebar from './Sidebar';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './pages/Home';
@@ -22,7 +23,27 @@ import Cubic_Spline from './pages/Cubic_spline'
 import PolynomialRegression from './pages/Polynomial_Regression'
 import SW from './pages/swagger'
 
-  function App() {
+class App extends React.Component {
+
+  state = {
+    collapsed: true,
+    at_cack: <Home/>
+  };
+
+  toggle = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
+
+  state = {
+    collapsed: false,
+  };
+
+  onCollapse = collapsed => {
+    this.setState({ collapsed });
+  };
+  render() {
     return (
       <Router>
         <Sidebar />
@@ -51,6 +72,6 @@ import SW from './pages/swagger'
       </Router>
     );
   }
-
+}
 
 export default App;

@@ -5,7 +5,9 @@ class home extends React.Component {
   render(){
     return(
         // <SwaggerUI url="" />
+        <center>
         <div>home</div>
+        </center>
     );
 }
 }
