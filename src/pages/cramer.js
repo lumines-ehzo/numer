@@ -6,7 +6,7 @@ import { Button } from 'antd'
 import {Matrix} from '../components/Source/Matrix'
 
 import axios from 'axios'
-let apiUrl = "http://localhost:4040/data/matrix/cramer_rule?key=45134Asd4864wadfad"
+let apiUrl = "http://localhost:4040/data/matrix/cramer_rule"
 
 class Cramer extends React.Component{
 

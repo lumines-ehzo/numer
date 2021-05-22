@@ -6,7 +6,8 @@ class home extends React.Component {
     return(
         // <SwaggerUI url="" />
         <center>
-        <div>home</div>
+        <div>รัฐภูมิ เรืองกล้า</div>
+        <div>6104062630212</div>
         </center>
     );
 }

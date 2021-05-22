@@ -8,7 +8,7 @@ import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
 import axios from 'axios'
 import '../css/layout.css'
 
-let apiUrl = "http://localhost:4040/data/root/False_position?key=45134Asd4864wadfad"
+let apiUrl = "http://localhost:4040/data/root/False_position"
 // let apiUrl = "https://my-json-server.typicode.com/pudjapu/react_wep/root"
 
 class FalsePosition extends React.Component {

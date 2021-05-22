@@ -5,7 +5,7 @@ import { Gauss_jodan } from '../components/Source/Gauss_jodan'
 
 import { Button } from 'antd'
 import axios from 'axios'
-let apiUrl = "http://localhost:4040/data/matrix/Gauss_Jodan?key=45134Asd4864wadfad"
+let apiUrl = "http://localhost:4040/data/matrix/Gauss_Jodan"
 
 class Gauss_Jordan extends React.Component {
 
